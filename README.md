@@ -8,5 +8,5 @@ This program allows one to add, choose, release, and disregard bots from the col
 3. run npm start
 
 
-## License
+## License & Author
  Caesar Keene
