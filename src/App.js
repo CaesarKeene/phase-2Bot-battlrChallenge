@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Navbar from "./components/Navbar"; 
+import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
+import BotCollection from "./components/BotCollection";
+import YourBotArmy from "./components/YourBotArmy";
+import { bots } from "./components/Data"; 
 
 function App() {
+  const [yourBotArmy, setYourBotArmy] = React.useState([]);
+
+  const enlistBot = (bot) => {
+    if (!yourBotArmy.some((enlistedBot) => enlistedBot.id === bot.id)) {
+      setYourBotArmy((prevArmy) => [...prevArmy, bot]);
+    }
+  };
+
+  const releaseBot = (botId) => {
+    setYourBotArmy((prevArmy) => prevArmy.filter((bot) => bot.id !== botId));
+  };
+
+  const dischargeBot = (botId) => {
+    setYourBotArmy((prevArmy) => prevArmy.filter((bot) => bot.id !== botId));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        { <Navbar/> }
+        <Routes>
+          <Route
+            path="/"
+            element={<BotCollection bots={bots} onClickEnlist={enlistBot} onClickRelease={releaseBot} onClickDischarge={dischargeBot} />}
+          />
+          <Route
+            path="/your-bot-army"
+            element={<YourBotArmy army={yourBotArmy} onClickRelease={releaseBot} onClickDischarge={dischargeBot} />}
+          />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
